@@ -40,7 +40,9 @@ function ProfilePage() {
   - user.name을 그리는 div 요소
 - next.js를 사용하지만 useEffect 내부에서 fetch를 사용하고 있어서 SSR 고려 X
 
-## 개선 방향
+---
+
+## 👍 개선 방향
 
 ### 1. 도메인(DDD) 주도 설계 방식 적용하기 (변화에 유연한 구조 만들기 → 역할 분리)
 
