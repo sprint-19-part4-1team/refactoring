@@ -29,7 +29,9 @@ function ProfilePage() {
 }
 ```
 
-## 위 코드의 문제점
+---
+
+## 🤔 위 코드의 문제점
 
 - 모든 로직이 한 곳에 몰려있음 (단일 책임 원칙(SRP) X)
   - 토큰을 가져오는 로직
@@ -50,7 +52,9 @@ function ProfilePage() {
 
 - 계층별 책임에 맞게 레이어 분리하기
 
-## 이해되지 않는 용어 정리
+---
+
+## 🤯 잘 모르겠는 용어 정리
 
 ### 아키텍쳐(Architecture)? 뭔데?
 
@@ -85,11 +89,66 @@ function ProfilePage() {
 
 +) 아직 헷갈리는거 (날짜 포맷팅 함수 예시)
 
-- 우리 서비스는 날짜를 이렇게 보여줘 (7일 이후 YYYY-MM-DD, 방금전, n분전..등등): 도메인 계층
-- 단순히 date를 iso string으로 변환하기: 유틸함수
+- 우리 서비스는 날짜를 이렇게 보여줘 (7일 이후 YYYY-MM-DD, 방금전, n분전..등등): `도메인 계층`
+- 단순히 date를 iso string으로 변환하기: `유틸함수`
 
 #### 4. Infrastructure Layer (인프라 계층)
 
 - 외부 시스템과 실제로 연결되는 구현부
 - 기술 의존성이 있는 코드는 인프라 계층에 해당됨
 - ex) axios 인스턴스, fetch wrapper, 로컬스토리지 접근, 외부 api 연동 등등
+
+---
+
+## ✨ 개선 과정
+
+### 폴더 구조
+
+```pl
+📦src
+ ┣ 📂app                  # Next.js Presentation Layer (UI + Routing)
+ ┃ ┣ 📜layout.tsx
+ ┃ ┗ 📜page.tsx
+ ┗ 📂features
+ ┃ ┗ 📂user
+ ┃ ┃ ┣ 📂application      # Use Case (Flow)
+ ┃ ┃ ┣ 📂domain           # Rules / Entities
+ ┃ ┃ ┣ 📂infrastructure   # API / Storage / External
+ ┃ ┃ ┗ 📂ui               # Components
+```
+
+### 호출 흐름
+
+```pl
+🎯 UI → Application → Infrastructure
+Application → Domain
+```
+
+- UI는 Application만 호출한다
+- Application은 Domain + Infra 모두 호출 가능 (Domain은 Application을 절대 호출 할 수 없음!!!!!!!!!!!!!)
+- Domain은 순수 로직 → Infra, UI 사용 금지
+- Infra는 Domain을 의존해도 되지만 앱 전체는 Infra에 종속되면 안 됨
+
+### 그럼 공통/공용 로직은?
+
+- shared 폴더 하위에 담아두기
+- axios instance 설정은 모든 곳에서 사용하기 때문에 shared 하위 `infrastructure`가 적합
+- 그러면 폴더 구조가 또 이렇게 변화함
+
+```pl
+📦src
+ ┣ 📂app
+ ┃ ┣ 📜layout.tsx
+ ┃ ┗ 📜page.tsx
+ ┣ 📂shared                      # 공용 레이어
+ ┃ ┣ 📂ui                        # 공용 UI 컴포넌트
+ ┃ ┣ 📂hooks                     # 공용 hooks
+ ┃ ┣ 📂utils                     # 공용 util
+ ┃ ┗ 📂infrastructure            # axiosInstance, storage 등
+ ┗ 📂features
+   ┗ 📂user
+     ┣ 📂application
+     ┣ 📂domain
+     ┣ 📂infrastructure
+     ┗ 📂ui
+```
