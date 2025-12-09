@@ -62,7 +62,9 @@ function ProfilePage() {
 #### 1. Presentation Layer (프레젠테이션 계층)
 
 - 화면과 사용자 인터랙션만 담당함 (React 컴포넌트)
-  **무슨 역할을 할까?**
+
+**무슨 역할을 할까?**
+
 - UI 그리기
 - 상태 보여주기
 - 사용자 입력 처리 (onClick 등...)
