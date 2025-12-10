@@ -1,0 +1,21 @@
+// 전체적인 흐름을 나타내는 함수
+import { getAccessToken } from '../../infra/getAccessToken';
+import { isTokenInvalid } from '../../domain/token/checkToken';
+import { fetchUser } from '../../infra/userApi';
+
+interface RunProfileFlowParams {
+  router: { push: (path: string) => void };
+  setUser: (user: any) => void;
+}
+
+export function runProfileFlow({ router, setUser }: RunProfileFlowParams) {
+  const token = getAccessToken();
+  const isInvalid = isTokenInvalid(token);
+
+  if (isInvalid) {
+    router.push('/login');
+    return;
+  }
+
+  fetchUser(token).then((data) => setUser(data));
+}
