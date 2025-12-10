@@ -40,7 +40,7 @@ export function runProfileFlow({ router, setUser }) {
   if (isInvalid) {
     router.push('/login');
     return;
-  } else {
-    fetchUser(token).then((data) => setUser(data));
   }
+
+  fetchUser(token).then((data) => setUser(data));
 }
