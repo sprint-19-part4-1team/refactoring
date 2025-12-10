@@ -3,6 +3,7 @@ import { getAccessToken } from '../../infra/getAccessToken';
 import { isTokenInvalid } from '../../domain/token/checkToken';
 import { fetchUser } from '../../infra/userApi';
 import { User } from '../../domain/user/types';
+import { AccessToken } from '../../domain/token/types';
 
 interface RunProfileFlowParams {
   router: { push: (path: string) => void };
