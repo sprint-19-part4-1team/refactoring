@@ -15,7 +15,7 @@ function ProfilePage() {
 }
 
 // 토큰이 존재하는지, 유효기간이 지났는지 체크하는 함수
-export function checkToken(token) {
+export function isTokenInvalid(token) {
   return !token || isTokenExpired(token);
 }
 
@@ -35,7 +35,7 @@ export function fetchUser(token) {
 // 전체적인 흐름을 나타내는 함수
 export function runProfileFlow({ router, setUser }) {
   const token = getAccessToken();
-  const isInvalid = checkToken(token);
+  const isInvalid = isTokenInvalid(token);
 
   if (isInvalid) {
     router.push('/login');
