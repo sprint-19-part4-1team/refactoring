@@ -8,18 +8,15 @@ function ProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
-    runProfileFlow();
+    runProfileFlow({ router, setUser });
   }, []);
 
   return <div>{user?.name}</div>;
 }
 
-// 토큰 체크하는 함수
+// 토큰이 존재하는지, 유효기간이 지났는지 체크하는 함수
 export function checkToken(token) {
-  if (!token || isTokenExpired(token)) {
-    router.push('/login');
-    return;
-  }
+  return !token || isTokenExpired(token);
 }
 
 // 로컬스토리지에서 토큰 가져오는 함수
@@ -36,8 +33,14 @@ export function fetchUser(token) {
 }
 
 // 전체적인 흐름을 나타내는 함수
-export function runProfileFlow() {
+export function runProfileFlow({ router, setUser }) {
   const token = getAccessToken();
+
   checkToken(token);
+
+  if (checkToken(token)) {
+    router.push('/login');
+  }
+
   fetchUser(token).then((data) => setUser(data));
 }
