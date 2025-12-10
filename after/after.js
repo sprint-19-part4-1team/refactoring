@@ -35,12 +35,12 @@ export function fetchUser(token) {
 // 전체적인 흐름을 나타내는 함수
 export function runProfileFlow({ router, setUser }) {
   const token = getAccessToken();
+  const isInvalid = checkToken(token);
 
-  checkToken(token);
-
-  if (checkToken(token)) {
+  if (isInvalid) {
     router.push('/login');
+    return;
+  } else {
+    fetchUser(token).then((data) => setUser(data));
   }
-
-  fetchUser(token).then((data) => setUser(data));
 }
