@@ -12,8 +12,13 @@ interface RunProfileFlowParams {
 
 export function runProfileFlow({ router, setUser }: RunProfileFlowParams) {
   const token = getAccessToken();
-  const isInvalid = isTokenInvalid(token);
 
+  if (token === null) {
+    router.push('/login');
+    return;
+  }
+
+  const isInvalid = isTokenInvalid(token);
   if (isInvalid) {
     router.push('/login');
     return;
