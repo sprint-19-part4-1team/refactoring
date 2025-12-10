@@ -2,10 +2,11 @@
 import { getAccessToken } from '../../infra/getAccessToken';
 import { isTokenInvalid } from '../../domain/token/checkToken';
 import { fetchUser } from '../../infra/userApi';
+import { User } from '../../domain/user/types';
 
 interface RunProfileFlowParams {
   router: { push: (path: string) => void };
-  setUser: (user: any) => void;
+  setUser: (user: User) => void;
 }
 
 export function runProfileFlow({ router, setUser }: RunProfileFlowParams) {
